@@ -12,7 +12,7 @@ Do the following to add the script to you crontab as root
 
 add this line at the bottom:
 
-*/1 * * * * root python <PATH TO PyAuthNotify.py>
+*/1 * * * * root python PATH-TO PyAuthNotify.py
 
 
 This script includes the prowlpy library which I have included.
