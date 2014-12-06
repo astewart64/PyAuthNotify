@@ -1,24 +1,23 @@
 import prowlpy
 from os import system
 
-prowl = prowlpy.Prowl("a14760eb4526b54081ddd233ae9f819ff523000f")
+prowl = prowlpy.Prowl("<API KEY GOES HERE>")              # replace with your prowl API key
 
-# prowl.post("AuthNotify", "test!")
-AUTHLOG = open("/var/log/auth.log", "r")
-BACKUPLOG = open("/root/backups/authbackup.txt", "a")
+AUTHLOG = open("/var/log/auth.log", "r")                  # log location
+BACKUPLOG = open("/root/backups/authbackup.txt", "a")     # log backup location
 
-def checkFails():
+def checkFails():                                         # function to check for failed logins               
     for line in AUTHLOG:
         BACKUPLOG.write(line)
-        if "authentication failure" in line:
-            prowl.post("CF30",
+        if "authentication failure" in line:              # checks for specific text in logfile
+            prowl.post("PyAuthNotify",                    # notification content, change to anything
                        "LOGIN FAILURE",
                        "Unsuccessful login attempt",
-                       "1")
+                       "1")                               # notification priority
         if "user unknown" in line:
-            prowl.post("CF30",
+            prowl.post("PyAuthNotify",
                        "USER UNKNOWN",
-                       "Possible bruteforce attempt",
+                       "Nonexsistent user login attempt",
                        "2")
         else:
             continue
@@ -26,5 +25,5 @@ def checkFails():
 checkFails()
 AUTHLOG.close()
 BACKUPLOG.close()
-system("> /var/log/auth.log")
+system("> /var/log/auth.log")                             # clears log
 exit()
